@@ -1,0 +1,25 @@
+# Created at 2020-01-30T19:42:47.965
+TestSet has not finished before stream error has appeared >> initializing exit by non-null configuration: null
+java.io.EOFException
+	at java.base/java.io.DataInputStream.readInt(DataInputStream.java:397)
+	at org.apache.maven.surefire.booter.MasterProcessCommand.decode(MasterProcessCommand.java:115)
+	at org.apache.maven.surefire.booter.CommandReader$CommandRunnable.run(CommandReader.java:391)
+	at java.base/java.lang.Thread.run(Thread.java:834)
+
+
+# Created at 2020-01-30T19:42:50.564
+Unexpected IOException with stream: 2020-01-30 19:42:50.563  INFO 25405 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+
+
+# Created at 2020-01-30T19:42:50.582
+Unexpected IOException with stream: 2020-01-30 19:42:50.580  INFO 25405 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+
+
+# Created at 2020-01-30T19:42:52.177
+Unexpected IOException with stream: 2020-01-30 19:42:52.175  WARN 25405 --- [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+
+
+# Created at 2020-01-30T19:42:52.797
+Unexpected IOException with stream: 2020-01-30 19:42:52.796  INFO 25405 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+
+
