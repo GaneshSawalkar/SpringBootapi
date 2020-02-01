@@ -7,6 +7,7 @@ import com.bridgelabz.springboot.dto.LoginDto;
 import com.bridgelabz.springboot.dto.RegistrationDto;
 import com.bridgelabz.springboot.dto.ResetPasswordDto;
 import com.bridgelabz.springboot.dto.Userdetails;
+import com.bridgelabz.springboot.model.User;
 import com.bridgelabz.springboot.response.Response;
 
 public interface UserService {
@@ -28,5 +29,5 @@ public interface UserService {
 
 	public String check(String email); // check for verification status
 
-	public List getAllUsersdetails(); // get all users
+	public List<User> getAllUsersdetails(); // get all users
 }

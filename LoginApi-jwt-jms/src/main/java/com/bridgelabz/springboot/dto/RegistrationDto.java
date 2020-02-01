@@ -2,7 +2,6 @@ package com.bridgelabz.springboot.dto;
 
 public class RegistrationDto {
 
-	
 	private String userName;
 	private String password;
 	private String email;
@@ -10,9 +9,10 @@ public class RegistrationDto {
 	private long mobileNo;
 	private String confirmPassword;
 
-public RegistrationDto() {
-	
-}
+	public RegistrationDto() {
+
+	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -52,19 +52,13 @@ public RegistrationDto() {
 	public void setMobileNo(long mobileNo) {
 		this.mobileNo = mobileNo;
 	}
+
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
+
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
 
-	
-
-
-
-
-	
-
-	
 }

@@ -9,12 +9,13 @@ import com.auth0.jwt.interfaces.Claim;
 @Component
 public class Jwt {
 
-	private static final String SECRET_KEY = "SECRET";
+	private static final String SECRET_KEY = "secret";
 
 	public String createToken(String email) {
+		// generate token using algorithm
 		Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
-
-		return JWT.create().withClaim("email", email).sign(algorithm);
+		String token_key = JWT.create().withClaim("email", email).sign(algorithm);
+		return token_key;
 	}
 
 	public String getUserToken(String token) {

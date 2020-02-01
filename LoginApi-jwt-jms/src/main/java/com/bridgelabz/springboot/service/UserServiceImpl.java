@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,9 @@ import com.bridgelabz.springboot.utility.Jwt;
 @Transactional
 @PropertySource("classpath:message.properties") // add path of message properties
 public class UserServiceImpl implements UserService {
+
+	@Resource(name = "redisTemplate") // redis template
+	private SetOperations<String, String> setRepo;
 
 	@Autowired
 	private UserRepository repository; // user repository
@@ -91,27 +96,27 @@ public class UserServiceImpl implements UserService {
 		} else { // if not exist
 			if (registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
 				String token = jwt.createToken(registrationDto.getEmail());
-				jms.sendMail(registrationDto.getEmail(), token);
-				// bryBCryptPasswordEncoder.encode(registrationDto.getPassword());
-				user.setPassword(bryBCryptPasswordEncoder.encode(user.getPassword()));
+				jms.sendMail(registrationDto.getEmail(), token); // send token to usre's mail
 
-				// set join & modified date of new user
-				Date date = new Date();
+				user.setPassword(bryBCryptPasswordEncoder.encode(user.getPassword())); // encrypted password
+
+				Date date = new Date(); // set join & modified date of new user
 				user.setJoin(date);
 				user.setModified(date);
-				// save new user entry.
-				repository.save(user);
+
+				repository.save(user); // save new user entry.
 				return new Response(environment.getProperty("SERVIER_CODE_SUCCESS"),
 						environment.getProperty("NEW_USER_CREATED"));
 			}
 		}
-		// if user not show throw error
+
 		return new Response(environment.getProperty("SERVIER_CODE_ERROR"),
-				environment.getProperty("INVALID_CREDENTIALS"));
+				environment.getProperty("INVALID_CREDENTIALS")); // if user not show throw error
 	}
 
 	@Override
 	public Response login(LoginDto loginDto, String token) {
+
 		User user = modelMapper.map(loginDto, User.class);
 		// find email is exist or not
 		User userLogin = repository.findByEmail(user.getUserName());
@@ -123,11 +128,13 @@ public class UserServiceImpl implements UserService {
 			if (isVerifyToken(emailtoken)) { // if exist
 				boolean isUser = bryBCryptPasswordEncoder.matches(loginDto.getPassword(), userLogin.getPassword());
 				if (isUser) {
+
+					setRepo.add(token, userLogin.getEmail());
+					System.out.println("added in redis");
 					userLogin.setVerify(1);
+
 					return new Response(environment.getProperty("SERVER_CODE_SUCCESS"),
 							environment.getProperty("LOGIN_SUCCESS"));
-				} else {
-
 				}
 			}
 		}

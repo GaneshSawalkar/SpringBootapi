@@ -1,10 +1,10 @@
 package com.bridgelabz.springboot.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +21,6 @@ import com.bridgelabz.springboot.dto.LoginDto;
 import com.bridgelabz.springboot.dto.RegistrationDto;
 import com.bridgelabz.springboot.dto.ResetPasswordDto;
 import com.bridgelabz.springboot.dto.Userdetails;
-import com.bridgelabz.springboot.model.User;
 import com.bridgelabz.springboot.repository.UserRepository;
 import com.bridgelabz.springboot.response.Response;
 import com.bridgelabz.springboot.service.UserService;
@@ -79,6 +78,7 @@ public class UserController {
 	/**
 	 * @return :all users list
 	 */
+	@Cacheable("users")
 	@GetMapping("/show/all") // show all users without password
 	public ResponseEntity<List> list() {
 		return new ResponseEntity<List>(service.getAllUsers(), HttpStatus.OK);
@@ -87,6 +87,7 @@ public class UserController {
 	/**
 	 * @return all users list with password
 	 */
+	@Cacheable(value = "users")
 	@GetMapping("/show/alldetails") // show all users with password
 	public ResponseEntity<List> alldetails() {
 		return new ResponseEntity<List>(service.getAllUsersdetails(), HttpStatus.OK);
@@ -96,6 +97,7 @@ public class UserController {
 	 * @param id :users unique identity number
 	 * @return user info using id
 	 */
+	@Cacheable(value = "users", key = "#id") // store id in redis cache
 	@GetMapping("/show/{id}") // show by id
 	public Userdetails getById(@PathVariable int id) {
 		Userdetails userdetails = service.getById(id);
@@ -106,6 +108,7 @@ public class UserController {
 	 * @param id :users unique identity number
 	 * @return delete user using id
 	 */
+	@CacheEvict(value = "users", key = "#id")
 	@DeleteMapping("/delete/{id}") // delete by id
 	public String deleteUser(@PathVariable(value = "id") int id) {
 		service.deleteUser(id);
@@ -116,6 +119,7 @@ public class UserController {
 	 * @param email :users email id
 	 * @return status for verified/pending/not in list
 	 */
+
 	@GetMapping("/verify/{email}") // check verification status using email
 	public String isverifyUser(@PathVariable String email) {
 		String str = service.check(email);
