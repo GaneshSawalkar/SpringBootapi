@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 		if (userLogin == null) { // if not exist
 			System.out.println("User not found!");
 		} else {
-			String emailtoken = jwt.getUserToken(token);
+			String emailtoken = jwt.getUserToken(token.replace("Bearer ","").trim());
 			if (isVerifyToken(emailtoken)) { // if exist
 				boolean isUser = bryBCryptPasswordEncoder.matches(loginDto.getPassword(), userLogin.getPassword());
 				if (isUser) {

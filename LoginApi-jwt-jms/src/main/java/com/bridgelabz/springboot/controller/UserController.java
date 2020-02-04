@@ -127,4 +127,9 @@ public class UserController {
 
 	}
 
+	@GetMapping("/token={userVerifytoken}")
+	public String TokenVerification(@PathVariable String userVerifytoken) {
+		return "verification successful...!";
+	}
+
 }

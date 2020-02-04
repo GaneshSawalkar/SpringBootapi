@@ -16,7 +16,7 @@ public class Jms {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setFrom("cool.gimmy123@gmail.com");
 		mail.setTo(email);
-		mail.setText(token);
+		mail.setText("http://localhost:3535/user/token=" + token);
 		mail.setSubject("*****Verification Token*****");
 		System.out.println(mail.getFrom());
 		System.out.println(mail.getSubject());
