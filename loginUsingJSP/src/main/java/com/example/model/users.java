@@ -6,6 +6,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class users {
@@ -19,6 +24,14 @@ public class users {
 	private String pass;
 	@Column(name = "email")
 	private String email;
+	@Column(name = "fname")
+	private String fname;
+	@Column(name = "lname")
+	private String lname;
+	@Column(name = "phone")
+	private String phone;
+	@Column(name = "address")
+	private String address;
 
 	public users() {
 	}
@@ -26,38 +39,6 @@ public class users {
 	public users(String user, String pass) {
 		this.user = user;
 		this.pass = pass;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getUsername() {
-		return user;
-	}
-
-	public void setUsername(String username) {
-		this.user = username;
-	}
-
-	public String getPassword() {
-		return pass;
-	}
-
-	public void setPassword(String password) {
-		this.pass = password;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 }

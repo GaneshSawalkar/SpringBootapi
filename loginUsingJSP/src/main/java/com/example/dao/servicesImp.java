@@ -13,7 +13,7 @@ public class servicesImp implements services {
 	public boolean isvaliduser(usersdao usersdao, String user) {
 		List<users> list = (List<users>) usersdao.findAll();
 		for (users users : list) {
-			if (users.getUsername().equals(user)) {
+			if (users.getUser().equals(user)) {
 				return false;
 			}
 		}
@@ -25,7 +25,7 @@ public class servicesImp implements services {
 	public boolean isvalidmail(usersdao usersdao, String user) {
 		List<users> list = (List<users>) usersdao.findAll();
 		for (users users : list) {
-			if (users.getUsername().equals(user)) {
+			if (users.getUser().equals(user)) {
 				return false;
 			}
 		}
@@ -38,7 +38,7 @@ public class servicesImp implements services {
 		List<users> ll = userlist.findAll();
 		for (users users : ll) {
 			if (users.getEmail().equals(isuser.getEmail())) {
-				users.setPassword(isuser.getPassword());
+				users.setPass(isuser.getPass());
 			}
 
 		}
@@ -53,8 +53,8 @@ public class servicesImp implements services {
 	public int updateuser(usersdao userlist, users isuser) {
 		List<users> ll = userlist.findAll();
 		for (users users : ll) {
-			if (users.getUsername().equals(isuser.getUsername())) {
-				users.setUsername(isuser.getPassword());
+			if (users.getUser().equals(isuser.getUser())) {
+				users.setPass(isuser.getPass());
 			}
 
 		}

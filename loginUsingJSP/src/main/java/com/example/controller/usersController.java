@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +15,15 @@ import com.example.dao.servicesImp;
 import com.example.dao.usersdao;
 import com.example.model.users;
 
-@RestController
+@RestController("/user")
 public class usersController {
+	boolean status;;
 	@Autowired
 	private usersdao userlist;
-	
-	private services s = new servicesImp();
+
+	private users newuser;
+
+	private services service = new servicesImp();
 	private static Integer loginstatus = 0;
 	private static Integer logoutstatus = 1;
 	private static String myusername = null;
@@ -47,7 +49,7 @@ public class usersController {
 		List<users> users = (List<com.example.model.users>) userlist.findAll();
 		boolean find = false;
 		for (users users2 : users) {
-			if (users2.getUsername().equals(username) && users2.getPassword().equals(password)) {
+			if (users2.getUser().equals(username) && users2.getPass().equals(password)) {
 				mav.setViewName("welcomeuser");
 				myusername = username;
 				mav.addObject("usern", username);
@@ -82,35 +84,46 @@ public class usersController {
 	}
 
 	// register user
-	@GetMapping("/reg")
+	@GetMapping("/registers")
 	private ModelAndView registeruser() {
 		ModelAndView mv = new ModelAndView("register");
 		return mv;
 	}
 
 	@GetMapping("/register")
-	public ModelAndView register(@RequestParam String newusername, @RequestParam String newuserpass,
-			@RequestParam String newusermail) {
-		users newuser = new users();
-		newuser.setUsername(newusername);
-		newuser.setPassword(newuserpass);
-		newuser.setEmail(newusermail);
-		if (s.isvaliduser(userlist, newusername)) {
-			userlist.save(newuser);
+	public ModelAndView register(@RequestParam String email, @RequestParam String pass) {
+		newuser = new users();
+		newuser.setPass(pass);
+		newuser.setEmail(email);
+		newuser.setUser(email);
+		if (service.isvaliduser(userlist, email)) {
+			status = true;
 		} else {
 			ModelAndView mv = new ModelAndView("register");
-			mv.addObject("exist", newusername);
+			mv.addObject("exist", email);
 			return mv;
 		}
-		ModelAndView mv = new ModelAndView("welcomeuser");
-		mv.addObject("usern", newusername);
+		ModelAndView mv = new ModelAndView("personalDetails");
 		return mv;
+	}
+
+	@GetMapping("/personaldetails")
+	public ModelAndView personaldetails(@RequestParam String fname, @RequestParam String lname,
+			@RequestParam String address, @RequestParam String phone) {
+		newuser.setAddress(address);
+		newuser.setFname(fname);
+		newuser.setLname(lname);
+		newuser.setPhone(phone);
+		userlist.save(newuser);
+		ModelAndView mv = new ModelAndView("welcomeuser");
+
+		return mv;
+
 	}
 
 	@GetMapping("/pass")
 	public ModelAndView password() {
 		ModelAndView mv = new ModelAndView("password-recovery");
-
 		return mv;
 	}
 
@@ -118,9 +131,9 @@ public class usersController {
 	public ModelAndView psswordrecovery(@RequestParam String usermail, @RequestParam String password) {
 		ModelAndView mv = new ModelAndView("index");
 		users user = new users();
-		user.setPassword(password);
+		user.setPass(password);
 		user.setEmail(usermail);
-		int update = s.updatepassword(userlist, user);
+		int update = service.updatepassword(userlist, user);
 		return mv;
 	}
 
