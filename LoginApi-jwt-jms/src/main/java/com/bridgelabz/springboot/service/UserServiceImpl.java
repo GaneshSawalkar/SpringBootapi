@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 		// find email is exist or not
 		User userExist = repository.findByEmail(registrationDto.getEmail());
 		if (userExist != null) { // if exist
-			return new Response(environment.getProperty("SERVIER_CODE_ERROR"), environment.getProperty("USER_PRESENT"));
+			return new Response(environment.getProperty("SERVER_CODE_ERROR"), environment.getProperty("USER_PRESENT"));
 		} else { // if not exist
 			if (registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
 				String token = jwt.createToken(registrationDto.getEmail());
@@ -105,12 +105,12 @@ public class UserServiceImpl implements UserService {
 				user.setModified(date);
 
 				repository.save(user); // save new user entry.
-				return new Response(environment.getProperty("SERVIER_CODE_SUCCESS"),
+				return new Response(environment.getProperty("SERVER_CODE_SUCCESS"),
 						environment.getProperty("NEW_USER_CREATED"));
 			}
 		}
 
-		return new Response(environment.getProperty("SERVIER_CODE_ERROR"),
+		return new Response(environment.getProperty("SERVER_CODE_ERROR"),
 				environment.getProperty("INVALID_CREDENTIALS")); // if user not show throw error
 	}
 
